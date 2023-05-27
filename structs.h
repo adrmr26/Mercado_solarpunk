@@ -14,3 +14,6 @@ typedef struct Nodo {
     struct Nodo *siguiente;
 }Nodo;
 
+typedef struct Almacen {
+    Nodo *lista_productos;
+}Almacen;

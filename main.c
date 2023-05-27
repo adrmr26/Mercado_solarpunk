@@ -1,23 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-// Definición de la estructura Producto
-typedef struct {
-    int codigo;
-    char nombre[50];
-    int disponibilidad;
-    int necesidad;
-} Producto;
-
-// Definición de la estructura Nodo
-typedef struct Nodo {
-    Producto producto;
-    struct Nodo* siguiente;
-} Nodo;
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include "structs.h"
 
 // Función para insertar un producto al final de la lista
-void insertarProducto(Nodo** cabeza, Producto producto) {
+void insertarProducto(Nodo** cabeza, Producto *producto) {
     Nodo* nuevoNodo = (Nodo*)malloc(sizeof(Nodo));
     nuevoNodo->producto = producto;
     nuevoNodo->siguiente = NULL;
@@ -37,7 +26,7 @@ void insertarProducto(Nodo** cabeza, Producto producto) {
 Nodo* buscarProducto(Nodo* cabeza, int codigo) {
     Nodo* actual = cabeza;
     while (actual != NULL) {
-        if (actual->producto.codigo == codigo) {
+        if (actual->producto->codigo == codigo) {
             return actual;
         }
         actual = actual->siguiente;
@@ -47,9 +36,9 @@ Nodo* buscarProducto(Nodo* cabeza, int codigo) {
 
 // Función para modificar la disponibilidad de un producto
 void modificarDisponibilidad(Nodo* cabeza, int codigo, int nuevaDisponibilidad) {
-    Nodo* producto = buscarProducto(cabeza, codigo);
-    if (producto != NULL) {
-        producto->producto.disponibilidad = nuevaDisponibilidad;
+    Nodo* nodo = buscarProducto(cabeza, codigo);
+    if (nodo != NULL) {
+        nodo->producto->disponibilidad = nuevaDisponibilidad;
         printf("Disponibilidad modificada correctamente.\n");
     } else {
         printf("Producto no encontrado.\n");
@@ -58,9 +47,9 @@ void modificarDisponibilidad(Nodo* cabeza, int codigo, int nuevaDisponibilidad) 
 
 // Función para modificar la necesidad de un producto
 void modificarNecesidad(Nodo* cabeza, int codigo, int nuevaNecesidad) {
-    Nodo* producto = buscarProducto(cabeza, codigo);
-    if (producto != NULL) {
-        producto->producto.necesidad = nuevaNecesidad;
+    Nodo* nodo = buscarProducto(cabeza, codigo);
+    if (nodo != NULL) {
+        nodo->producto->necesidad = nuevaNecesidad;
         printf("Necesidad modificada correctamente.\n");
     } else {
         printf("Producto no encontrado.\n");
@@ -71,10 +60,11 @@ void modificarNecesidad(Nodo* cabeza, int codigo, int nuevaNecesidad) {
 void imprimirLista(Nodo* cabeza) {
     Nodo* actual = cabeza;
     while (actual != NULL) {
-        printf("Código: %d\n", actual->producto.codigo);
-        printf("Nombre: %s\n", actual->producto.nombre);
-        printf("Disponibilidad: %d\n", actual->producto.disponibilidad);
-        printf("Necesidad: %d\n", actual->producto.necesidad);
+        printf("Producto:\n");
+        printf("Código: %d\n", actual->producto->codigo);
+        printf("Nombre: %s\n", actual->producto->nombre);
+        printf("Disponibilidad: %d\n", actual->producto->disponibilidad);
+        printf("Necesidad: %d\n", actual->producto->necesidad);
         printf("------------------------\n");
         actual = actual->siguiente;
     }
@@ -91,30 +81,79 @@ void liberarLista(Nodo** cabeza) {
     *cabeza = NULL;
 }
 
+void desvincularAlmacen(Almacen* almacen, int shmId){
+    // Desadjunta el área de memoria compartida
+    if (shmdt(almacen) == -1) {
+        perror("Error al desadjuntar el área de memoria compartida");
+        exit(1);
+    }
+    // Elimina el área de memoria compartida
+    if (shmctl(shmId, IPC_RMID, NULL) == -1) {
+        perror("Error al eliminar el área de memoria compartida");
+        exit(1);
+    }
+    else{
+        printf("\nSe ha desvinculado el área de memoria compartida del Almacén\n");
+    }
+}
+
 // Ejemplo de uso
 int main() {
-    Nodo* lista_productos = NULL;
 
-    // Insertar productos de ejemplo
-    Producto producto1 = {1, "Producto 1", 10, 5};
-    Producto producto2 = {2, "Producto 2", 5, 2};
-    Producto producto3 = {3, "Producto 3", 3, 1};
+    //Se crea el área de memoria compartida del Almacen
 
-    insertarProducto(&lista_productos, producto1);
-    insertarProducto(&lista_productos, producto2);
-    insertarProducto(&lista_productos, producto3);
+    // Genera una clave única para la memoria compartida
+    key_t clave = ftok(".", 'a'); 
 
-    // Modificar la disponibilidad de un producto
-    modificarDisponibilidad(lista_productos, 2, 8);
+    // Crea/obtiene el ID de la memoria compartida
+    int shmId = shmget(clave, sizeof(Almacen), IPC_CREAT | 0666); 
 
-    // Modificar la necesidad de un producto
-    modificarNecesidad(lista_productos, 3, 2);
+    // Adjunta el segmento de memoria compartida al puntero "almacen"
+    Almacen* almacen = (Almacen*)shmat(shmId, NULL, 0);
+
+    // Inicializar lista de productos de almacen
+    almacen->lista_productos = NULL;
+
+    // Creación de productos de prueba 
+    Producto* producto1 = (Producto*)malloc(sizeof(Producto));
+    producto1->codigo = 1;
+    strcpy(producto1->nombre,"Arroz");
+    producto1->disponibilidad= 5;
+    producto1->necesidad = 0;
+
+    Producto* producto2 = (Producto*)malloc(sizeof(Producto));
+    producto2->codigo = 2;
+    strcpy(producto2->nombre,"Frijoles");
+    producto2->disponibilidad = 5;
+    producto2->necesidad = 0;
+
+    Producto* producto3 = (Producto*)malloc(sizeof(Producto));
+    producto3->codigo = 3;
+    strcpy(producto3->nombre,"Maiz");
+    producto3->disponibilidad = 5;
+    producto3->necesidad= 0;
+
+    insertarProducto(&almacen->lista_productos, producto1);
+    insertarProducto(&almacen->lista_productos, producto2);
+    insertarProducto(&almacen->lista_productos, producto3);
 
     // Imprimir la lista de productos
-    imprimirLista(lista_productos);
+    imprimirLista(almacen->lista_productos);
+
+    // Modificar la disponibilidad de un producto
+    modificarDisponibilidad(almacen->lista_productos, 2, 8);
+
+    // Modificar la necesidad de un producto
+    modificarNecesidad(almacen->lista_productos, 3, 2);
+
+    // Imprimir la lista de productos
+    imprimirLista(almacen->lista_productos);
 
     // Liberar la memoria ocupada por la lista
-    liberarLista(&lista_productos);
+    liberarLista(&almacen->lista_productos);
+
+    // Desvincula el segmento de memoria compartida
+    desvincularAlmacen(almacen, shmId); 
 
     return 0;
 }
