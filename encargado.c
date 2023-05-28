@@ -12,7 +12,7 @@ sem_t semaforo;
 void *funcion_hilo(void *arg) {
     int id = *(int *) arg;
     printf("Hilo %d iniciado\n", id);
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 8; i++) {
         sem_wait(&semaforo); // esperar a que el semáforo sea mayor que cero
         contador++; // sección crítica
         printf("Hilo %d: contador = %d\n", id, contador);
