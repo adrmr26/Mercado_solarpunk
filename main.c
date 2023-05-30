@@ -111,17 +111,17 @@ int main() {
     //Memoria compartida 2 
 
     //Genera una clave única para la memoria compartida 
-    key_t clave2 = ftok(".", 'a')
+    key_t clave2 = ftok(".", 'a');
 
      // Crea/obtiene el ID de la memoria compartida
-    int shmId = shmget(clave2, sizeof(Mercado), IPC_CREAT | 0666); 
+    int shmId2 = shmget(clave2, sizeof(Mercado), IPC_CREAT | 0666); 
 
     // Adjunta el segmento de memoria compartida al puntero "Mercado"
-     Mercado* mercado = (Mercado*)shmat(shmId, NULL, 0);
+     Mercado* mercado = (Mercado*)shmat(shmId2, NULL, 0);
 
 
     // Inicializar lista de productos de almacen
-    mercado->producto_mercado = NULL;
+    mercado->lista_productos_anaqueles = NULL;
 
     
     /*

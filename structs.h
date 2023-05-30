@@ -27,8 +27,7 @@ typedef struct Almacen {
 }Almacen; 
  
 typedef struct Mercado { 
-    Producto anaqueles[Numero_anaqueles]; 
-    Producto almacen[Max_numero_producto]; 
+    Nodo *lista_productos_anaqueles;
     int num_anaqueles; 
 }Mercado; 
  
