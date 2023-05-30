@@ -6,12 +6,6 @@
 #include "structs.h"
 
 
-#define Numero_comunas 6
-#define Numero_productos 4
-#define Numero_anaqueles 3
-#define Numero_total_productos 10
-
-
 //Funcion para liberar la memoria compartida y sus datos 
 void desvincularAlmacen(Almacen* almacen, int shmId) {
     // Desadjunta el área de memoria compartida
@@ -31,82 +25,77 @@ void desvincularAlmacen(Almacen* almacen, int shmId) {
 
 
 
-// Función para insertar un producto al final de la lista
-void insertarProducto(Nodo** primero, Producto *producto) {
-    Nodo* nuevoNodo = (Nodo*)malloc(sizeof(Nodo));
-    nuevoNodo->producto = producto;
-    nuevoNodo->siguiente = NULL;
-
-    if (*primero == NULL) {
-        *primero = nuevoNodo;
-    } else {
-        Nodo* actual = *primero;
-        while (actual->siguiente != NULL) {
-            actual = actual->siguiente;
-        }
-        actual->siguiente = nuevoNodo;
+//Genera los productos de cada comuna de forma aleatoria  
+void generar_productos(Comuna* comuna, char nombre_productos[11][10]) { 
+    int i; 
+    int numero_personas = rand() % Max_numero_personas + 1; //Se define la cantidad de personas de forma aleatorea 
+ 
+    for (i = 0; i < Max_numero_producto; i++) { 
+        int index_producto = rand() % 11; 
+        comuna->productos[i].codigo = i + 1; 
+        sprintf(comuna->productos[i].nombre,nombre_productos[index_producto]); 
+        comuna->productos[i].disponibilidad = rand() % 100; 
+        comuna->productos[i].necesidad = 0; 
+    } 
+    comuna->numero_productos = Max_numero_producto; 
+ 
+    for (i = 0; i < numero_personas; i++) { 
+        int id_producto = rand() % Max_numero_producto; 
+        comuna->productos[id_producto].necesidad++; // Aumentar la necesidad de un producto aleatorio para iniciar 
+    } 
+} 
+ 
+//Inicializa las personas , en este caso los hilos con su acción , cantidad de producto y tiempo de duracion  
+void* inicializar_persona(void* arg) { 
+    int* id_persona = (int*)arg; 
+    int comuna_id = id_persona[0]; 
+    int persona_id = id_persona[1]; 
+    Comuna* comuna = &comunas[comuna_id]; 
+ 
+    while (1) { //De esta forma el loop es infinito hasta que se encuentre un break  
+        int producto_id = rand() % comuna->numero_productos; //Se le asigna un producto de la comuna de forma aleatorea 
+        int cantidad_producto = rand() % 10 + 1; //Cantidad que produce o necesita la persona  
+        int accion  = rand() % 2; //Selecciona de forma aleatorea que accion hace la persona  
+        int tiempo = rand() % 60 + 1; //Cantidad de tiempo que tarda en minutos   
+ 
+        if (accion == 1) { 
+            sem_wait(&mutex_anaqueles); //AQUI SEMAFORO 
+            comuna->productos[producto_id].disponibilidad += cantidad_producto; 
+            printf("La persona %d de la Comuna ID %d tiene lista %d unidades de %s, en %d minutos\n", persona_id, comuna_id, cantidad_producto, comuna->productos[producto_id].nombre, tiempo); 
+            sem_post(&mutex_anaqueles); 
+        } else { 
+            sem_wait(&mutex_anaqueles); //AQUI SEMAFORO 
+            comuna->productos[producto_id].necesidad += cantidad_producto; 
+            printf("La persona %d de la Comuna ID %d necesita %d unidades de %s, en %d minutos\n", persona_id, comuna_id, cantidad_producto, comuna->productos[producto_id].nombre, tiempo); 
+            sem_post(&mutex_anaqueles); 
+        } 
+ 
+        sleep(tiempo); //De tiempo toma el que dura  
+    } 
+} 
+ 
+// Ejemplo de uso 
+int main() { 
+ 
+    char nombre_comida[11][10] = {"Arroz","Frijoles","Maiz","Papa","Zanahoria","Yuca","Lentejas","Tomate","Brocoli","Coliflor","Aguacate"} ; 
+    Comuna lista_comunas[Numero_comunas]; //Lista de comunas inicializadas 
+    pthread_t personas_hilos[Numero_comunas][Max_numero_personas]; //Crea una matriz de comunas y sus hilos  
+ 
+     // Inicializa un semaforo  
+    sem_init(&mutex_anaqueles, 0, 1); 
+    sem_init(&mutex_almacen, 0, 1); 
+ 
+    //Genera las comunas y personas de cada comuna  
+    for (int i = 0; i < Numero_comunas; i++) { 
+        generar_productos(&comunas[i],nombre_comida); 
+        for (int j = 0; j < Max_numero_personas; j++) { 
+            int* persona_id = malloc(2 * sizeof(int)); 
+            persona_id[0] = i; // Comuna ID 
+            persona_id[1] = j; // Persona ID 
+            pthread_create(&personas_hilos[i][j], NULL, inicializar_persona, persona_id); 
+        } 
     }
-}
-
-// Función para buscar un producto por su código establecido 
-Nodo* buscarProducto(Nodo* primero, int codigo) {
-    Nodo* actual = primero;
-    while (actual != NULL) {
-        if (actual->producto->codigo == codigo) {
-            return actual;
-        }
-        actual = actual->siguiente;
-    }
-    return NULL; //En caso de no encontrarlo devuelve null
-}
-
-// Función para modificar la disponibilidad de un producto
-void modificarDisponibilidad(Nodo* primero, int codigo, int nueva_disponibilidad) {
-    Nodo* nodo = buscarProducto(primero, codigo);
-    if (nodo != NULL) {
-        nodo->producto->disponibilidad = nueva_disponibilidad;
-        printf("La disponibilidad fue modificada de forma correcta.\n");
-    } else {
-        printf("Error en mercado:El producto no fue encontrado.\n");
-    }
-}
-
-// Función para modificar la necesidad de un producto
-void modificarNecesidad(Nodo* primero, int codigo, int nueva_necesidad) {
-    Nodo* nodo = buscarProducto(primero, codigo);
-    if (nodo != NULL) {
-        nodo->producto->necesidad = nueva_necesidad;
-        printf("La necesidad modificada correctamente.\n");
-    } else {
-        printf("Error en mercado:El producto no fue encontrado.\n");
-    }
-}
-
-// Función para imprimir la lista de productos con su respectivas caracteristicas 
-void imprimirLista(Nodo* primero) {
-    Nodo* actual = primero;
-    while (actual != NULL) {
-        printf("Producto:\n");
-        printf("Código: %d\n", actual->producto->codigo);
-        printf("Nombre: %s\n", actual->producto->nombre);
-        printf("Disponibilidad: %d\n", actual->producto->disponibilidad);
-        printf("Necesidad: %d\n", actual->producto->necesidad);
-        printf("------------------------\n");
-        actual = actual->siguiente;
-    }
-}
-
-// Función para liberar la memoria ocupada por la lista , se eliminan los datos
-void liberarLista(Nodo** primero) {
-    Nodo* actual = *primero;
-    while (actual != NULL) {
-        Nodo* siguiente = actual->siguiente;
-        free(actual);
-        actual = siguiente;
-    }
-    *primero = NULL; //Inicializamos el primer nodo 
-}
-
+    /*
 // Ejemplo de uso
 int main() {
 
@@ -172,7 +161,7 @@ int main() {
     }*/
 
 
-    
+    /*
 
     // Imprimir la lista de productos
     imprimirLista(almacen->lista_productos);
@@ -191,6 +180,7 @@ int main() {
 
     // Desvincula el segmento de memoria compartida
     desvincularAlmacen(almacen, shmId); 
+    */
 
     return 0;
 }

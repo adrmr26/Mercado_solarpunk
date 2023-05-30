@@ -1,28 +1,37 @@
-#define Numero_personas 3
+#include <semaphore.h>
+#define Max_numero_personas 5 
+#define Max_numero_producto 6 
+#define Numero_comunas 6 
+#define Numero_anaqueles 3 
+ 
+typedef struct Producto { 
+ int codigo; 
+    char nombre[20]; 
+    int necesidad;  
+    int disponibilidad;  
+}Producto; 
+ 
+typedef struct Nodo { 
+ Producto *producto; 
+    struct Nodo *siguiente; 
+}Nodo; 
+ 
+typedef struct Comuna { 
+    Producto productos[Max_numero_producto]; 
+    int numero_productos; 
+} Comuna; 
+ 
 
-typedef struct Producto {
-	int codigo;
-    char nombre[20];
-    int necesidad; 
-    int disponibilidad; 
-}Producto;
-
-typedef struct Nodo {
-	Producto *producto;
-    struct Nodo *siguiente;
-}Nodo;
-
-typedef struct Comuna {
-    int numero_comuna;
-    Producto productos[Numero_personas];
-    pthread_t personas[Numero_personas];
-} Comuna;
-
-typedef struct Almacen {
-    Nodo *lista_productos;
-}Almacen;
-
-typedef struct Mercado {
-    Producto* productos;
-    //pthread_mutex_t mutex;
-}Mercado;
+typedef struct Almacen { 
+    Nodo *lista_productos; 
+}Almacen; 
+ 
+typedef struct Mercado { 
+    Producto anaqueles[Numero_anaqueles]; 
+    Producto almacen[Max_numero_producto]; 
+    int num_anaqueles; 
+}Mercado; 
+ 
+Comuna comunas[Numero_comunas];
+sem_t mutex_anaqueles;
+sem_t mutex_almacen;
