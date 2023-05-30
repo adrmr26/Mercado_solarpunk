@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "structs.h"
 
 // Función para insertar un producto al final de la lista
 void insertarProducto(Nodo** primero, Producto *producto) {
