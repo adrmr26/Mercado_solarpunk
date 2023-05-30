@@ -95,6 +95,35 @@ int main() {
             pthread_create(&personas_hilos[i][j], NULL, inicializar_persona, persona_id); 
         } 
     }
+    // Genera una clave única para la memoria compartida
+    key_t clave = ftok(".", 'a'); 
+
+    // Crea/obtiene el ID de la memoria compartida
+    int shmId = shmget(clave, sizeof(Almacen), IPC_CREAT | 0666); 
+
+    // Adjunta el segmento de memoria compartida al puntero "almacen"
+    Almacen* almacen = (Almacen*)shmat(shmId, NULL, 0);
+
+
+    // Inicializar lista de productos de almacen
+    almacen->lista_productos = NULL;
+
+    //Memoria compartida 2 
+
+    //Genera una clave única para la memoria compartida 
+    key_t clave2 = ftok(".", 'a')
+
+     // Crea/obtiene el ID de la memoria compartida
+    int shmId = shmget(clave2, sizeof(Mercado), IPC_CREAT | 0666); 
+
+    // Adjunta el segmento de memoria compartida al puntero "Mercado"
+     Mercado* mercado = (Mercado*)shmat(shmId, NULL, 0);
+
+
+    // Inicializar lista de productos de almacen
+    mercado->producto_mercado = NULL;
+
+    
     /*
 // Ejemplo de uso
 int main() {
