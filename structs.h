@@ -1,7 +1,3 @@
-typedef struct Comuna {
-	int num_personas;
-}Comuna;
-
 typedef struct Producto {
 	int codigo;
     char nombre[20];
@@ -17,3 +13,8 @@ typedef struct Nodo {
 typedef struct Almacen {
     Nodo *lista_productos;
 }Almacen;
+
+typedef struct Mercado {
+    Producto* productos;
+    //pthread_mutex_t mutex;
+}Mercado;
