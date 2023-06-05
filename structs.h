@@ -21,11 +21,6 @@ typedef struct Comuna {
     int numero_productos; 
 } Comuna; 
  
-
-typedef struct Almacen { 
-    Nodo *lista_productos; 
-}Almacen; 
- 
 typedef struct Mercado { 
     Nodo *lista_productos_anaqueles;
     int num_anaqueles; 

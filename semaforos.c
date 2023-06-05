@@ -1,32 +1,40 @@
 #include <pthread.h>
 
+// Hay que poner un spinlock (while(true) para que no se hagan dos señales al mismo tiempo) 
+// cuado se pase a memoria compartida
+
 typedef struct {
-    int value;
+    int valor;
     pthread_cond_t cond;
     pthread_mutex_t mutex;
 } Semaforo;
 
-void init_semaforo(Semaforo* sem, int initial_value) {
-    sem->value = initial_value;
+void crear_semaforo(Semaforo* sem, int valor_inicial) {
+    sem->valor = valor_inicial;
     pthread_cond_init(&sem->cond, NULL);
     pthread_mutex_init(&sem->mutex, NULL);
 }
 
-void wait_semaforo(Semaforo* sem) {
+void espera_semaforo(Semaforo* sem) {
     pthread_mutex_lock(&sem->mutex);
-    sem->value--;
-    if (sem->value < 0) {
+    sem->valor--;
+    if (sem->valor < 0) {
         pthread_cond_wait(&sem->cond, &sem->mutex);
     }
     pthread_mutex_unlock(&sem->mutex);
 }
 
-void signal_semaforo(Semaforo* sem) {
+void señal_semaforo(Semaforo* sem) {
     pthread_mutex_lock(&sem->mutex);
-    sem->value++;
-    if (sem->value <= 0) {
+    sem->valor++;
+    if (sem->valor <= 0) {
         pthread_cond_signal(&sem->cond);
     }
     pthread_mutex_unlock(&sem->mutex);
+}
+
+void eliminar_semaforo(Semaforo* sem) {
+    pthread_mutex_destroy(&sem->mutex);
+    pthread_cond_destroy(&sem->cond);
 }
 

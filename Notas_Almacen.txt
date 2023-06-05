@@ -1,5 +1,3 @@
 ****FALTA******
 - Semáforos para el acceso a la memoria compartida
-- Algoritmos de intercambio con paginación 
-- Si se intercambian productos se debe bajar 1 en disponibilidad de 1 producto y subir la 
-  disponibilidad del producto que entra
+- Algoritmos de intercambio o swap (paginación) 
