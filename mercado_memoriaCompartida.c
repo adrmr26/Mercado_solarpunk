@@ -29,7 +29,7 @@
 
 
 
-void call_mum_for_cakes(Mercado *sh) {
+void call_mum_for_cakes(Mercado *mercado) {
     sleep((rand() % 5) + 2);
 
     mercado->available_pieces = 3;
@@ -50,6 +50,7 @@ void main() {
     // Initializing values
     //                    1 to share between processes    Initial value of the sem
     sem_init(&mercado->mutex,1,1);
+    mercado->available_pieces=3;
 
 
     for(int i = 0; i < Numero_comunas; i++) {
@@ -61,8 +62,8 @@ void main() {
 
                 sem_wait(&mercado->mutex);
 
-                if (Numero_anaqueles <= 0) 
-                    call_mum_for_cakes(mercado);
+                if (mercado->available_pieces <= 0)  //consulto disponibilidad de producto
+                    call_mum_for_cakes(mercado);   //llamo encargado
 
                 mercado->available_pieces -= 1;
 
@@ -85,6 +86,6 @@ void main() {
     for (int i = 0; i < Numero_comunas; i++) 
         while (wait(NULL) == -1);
 
-    munmap(sh, sizeof(Mercado));
+    munmap(mercado, sizeof(Mercado));
     shm_unlink(SHM_SEMS);
 }
