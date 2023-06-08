@@ -64,13 +64,13 @@ void* inicializar_persona(void* arg) {
             printf("La persona %d de la Comuna ID %d tiene lista %d unidades de %s, en %d minutos\n", persona_id, comuna_id, cantidad_producto, comuna->productos[producto_id].nombre, tiempo); 
             sem_post(&mutex_anaqueles); 
         } else { 
-            sem_wait(&mutex_anaqueles); //AQUI SEMAFORO 
-            comuna->productos[producto_id].necesidad += cantidad_producto; 
+            sem_wait(&mutex_anaqueles); //AQUI SEMAFORO  creo que no los ocupa 
+            comuna->productos[producto_id].necesidad += cantidad_producto;  //En esta misma lista debo revisar el hilo encargado comuna 
             printf("La persona %d de la Comuna ID %d necesita %d unidades de %s, en %d minutos\n", persona_id, comuna_id, cantidad_producto, comuna->productos[producto_id].nombre, tiempo); 
             sem_post(&mutex_anaqueles); 
         } 
  
-        sleep(tiempo); //De tiempo toma el que dura  
+        sleep(1); //De tiempo toma el que dura  
     } 
 } 
  
@@ -95,34 +95,7 @@ int main() {
             pthread_create(&personas_hilos[i][j], NULL, inicializar_persona, persona_id); 
         } 
     }
-    // Genera una clave única para la memoria compartida
-    key_t clave = ftok(".", 'a'); 
-
-    // Crea/obtiene el ID de la memoria compartida
-    int shmId = shmget(clave, sizeof(Almacen), IPC_CREAT | 0666); 
-
-    // Adjunta el segmento de memoria compartida al puntero "almacen"
-    Almacen* almacen = (Almacen*)shmat(shmId, NULL, 0);
-
-
-    // Inicializar lista de productos de almacen
-    almacen->lista_productos = NULL;
-
-    //Memoria compartida 2 
-
-    //Genera una clave única para la memoria compartida 
-    key_t clave2 = ftok(".", 'a');
-
-     // Crea/obtiene el ID de la memoria compartida
-    int shmId2 = shmget(clave2, sizeof(Mercado), IPC_CREAT | 0666); 
-
-    // Adjunta el segmento de memoria compartida al puntero "Mercado"
-     Mercado* mercado = (Mercado*)shmat(shmId2, NULL, 0);
-
-
-    // Inicializar lista de productos de almacen
-    mercado->lista_productos_anaqueles = NULL;
-
+  
     
     /*
 // Ejemplo de uso

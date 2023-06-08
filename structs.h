@@ -23,7 +23,8 @@ typedef struct Comuna {
  
 typedef struct Mercado { 
     Nodo *lista_productos_anaqueles;
-    int num_anaqueles; 
+    sem_t mutex;
+    int available_pieces;
 }Mercado; 
  
 Comuna comunas[Numero_comunas];
