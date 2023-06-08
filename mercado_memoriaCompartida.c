@@ -87,5 +87,5 @@ void main() {
         while (wait(NULL) == -1);
 
     munmap(mercado, sizeof(Mercado));
-    shm_unlink(SHM_SEMS);
+    shm_unlink(SHM_SEMS);//se borra la memoria 
 }
