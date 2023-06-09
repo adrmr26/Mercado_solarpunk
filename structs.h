@@ -3,6 +3,7 @@
 #define Max_numero_producto 6 
 #define Numero_comunas 6 
 #define Numero_anaqueles 3 
+
  
 typedef struct Producto { 
  int codigo; 
@@ -24,7 +25,7 @@ typedef struct Comuna {
 typedef struct Mercado { 
     Nodo *lista_productos_anaqueles;
     sem_t mutex;
-    int available_pieces;
+    int cantidad_anaqueles;
 }Mercado; 
  
 Comuna comunas[Numero_comunas];
