@@ -27,8 +27,6 @@
 /* DEFINES */
 #define MC "/memoria_compartida_mercado"
 
-
-
 void call_mum_for_cakes(Mercado *mercado) {
     sleep((rand() % 5) + 2);
 
@@ -41,7 +39,7 @@ void main() {
     srand(time(NULL));
     
     //Abre la memoria compartida
-    int fd_shm = shm_open(SHM_SEMS, O_RDWR | O_CREAT | O_EXCL,  S_IRUSR | S_IWUSR);
+    int fd_shm = shm_open(MC, O_RDWR | O_CREAT | O_EXCL,  S_IRUSR | S_IWUSR);
 
     ftruncate(fd_shm, sizeof(Mercado)); //Tamaño de la memoria compartida
 
@@ -87,5 +85,5 @@ void main() {
         while (wait(NULL) == -1);
 
     munmap(mercado, sizeof(Mercado));
-    shm_unlink(SHM_SEMS);//se borra la memoria 
+    shm_unlink(MC);//se borra la memoria 
 }
