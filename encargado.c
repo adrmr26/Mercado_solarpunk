@@ -62,8 +62,6 @@ int main() {
 
     printf("Memoria compartida creada correctamente\n");
 
-    // Realizar operaciones con la memoria compartida
-
     // Borrar la memoria compartida
     borrarMemoriaCompartida(fd_shm);
 
