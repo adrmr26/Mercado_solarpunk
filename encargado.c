@@ -29,20 +29,22 @@
 #define MC "/memoria_compartida_almacen"
 #define MAX_PRODUCTOS 3
 
-void crearMemoriaCompartida(int *fd_shm) {
+int fd_shm = -1;
+
+void crearMemoriaCompartida() {
     // Crear y configurar la memoria compartida
-    *fd_shm = shm_open(MC, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
-    if (*fd_shm == -1) {
+    fd_shm = shm_open(MC, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
+    if (fd_shm == -1) {
         perror("Error al crear la memoria compartida");
         exit(EXIT_FAILURE);
     }
-    if (ftruncate(*fd_shm, MAX_PRODUCTOS * sizeof(Producto)) == -1) {
+    if (ftruncate(fd_shm, MAX_PRODUCTOS * sizeof(Producto)) == -1) {
         perror("Error al ajustar el tamaño de la memoria compartida");
         exit(EXIT_FAILURE);
     }
 }
 
-void borrarMemoriaCompartida(int fd_shm) {
+void borrarMemoriaCompartida() {
     // Liberar recursos
     if (close(fd_shm) == -1) {
         perror("Error al cerrar la memoria compartida");
@@ -55,15 +57,13 @@ void borrarMemoriaCompartida(int fd_shm) {
 }
 
 int main() {
-    int fd_shm;
-
     // Crear la memoria compartida
-    crearMemoriaCompartida(&fd_shm);
+    crearMemoriaCompartida();
 
     printf("Memoria compartida creada correctamente\n");
 
     // Borrar la memoria compartida
-    borrarMemoriaCompartida(fd_shm);
+    borrarMemoriaCompartida();
 
     return 0;
 }
