@@ -3,7 +3,7 @@
 #include <string.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#include "structs.h"
+#include "encargado.c"
 
 
 //Funcion para liberar la memoria compartida y sus datos 
@@ -39,7 +39,7 @@ void generar_productos(Comuna* comuna, char nombre_productos[11][10]) {
     } 
     comuna->numero_productos = Max_numero_producto; 
  
-    for (i = 0; i < numero_personas; i++) { 
+    for (i = 0; i < numero_personas; i++) {  
         int id_producto = rand() % Max_numero_producto; 
         comuna->productos[id_producto].necesidad++; // Aumentar la necesidad de un producto aleatorio para iniciar 
     } 
@@ -59,15 +59,15 @@ void* inicializar_persona(void* arg) {
         int tiempo = rand() % 60 + 1; //Cantidad de tiempo que tarda en minutos   
  
         if (accion == 1) { 
-            sem_wait(&mutex_anaqueles); //AQUI SEMAFORO 
+           /// sem_wait(&mutex_anaqueles); //AQUI SEMAFORO 
             comuna->productos[producto_id].disponibilidad += cantidad_producto; 
             printf("La persona %d de la Comuna ID %d tiene lista %d unidades de %s, en %d minutos\n", persona_id, comuna_id, cantidad_producto, comuna->productos[producto_id].nombre, tiempo); 
-            sem_post(&mutex_anaqueles); 
+            //sem_post(&mutex_anaqueles); 
         } else { 
-            sem_wait(&mutex_anaqueles); //AQUI SEMAFORO  creo que no los ocupa 
+           // sem_wait(&mutex_anaqueles); //AQUI SEMAFORO  creo que no los ocupa 
             comuna->productos[producto_id].necesidad += cantidad_producto;  //En esta misma lista debo revisar el hilo encargado comuna 
             printf("La persona %d de la Comuna ID %d necesita %d unidades de %s, en %d minutos\n", persona_id, comuna_id, cantidad_producto, comuna->productos[producto_id].nombre, tiempo); 
-            sem_post(&mutex_anaqueles); 
+          //  sem_post(&mutex_anaqueles); 
         } 
  
         sleep(1); //De tiempo toma el que dura  
@@ -94,6 +94,8 @@ int main() {
             persona_id[1] = j; // Persona ID 
             pthread_create(&personas_hilos[i][j], NULL, inicializar_persona, persona_id); 
         } 
+        int* persona_id = malloc(2 * sizeof(int)); 
+        pthread_create(&personas_hilos[i][j], NULL, inicializar_encargado, persona_id); //crear el encargado
     }
   
     
