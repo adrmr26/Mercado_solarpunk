@@ -64,7 +64,7 @@ void* inicializar_encargado(void* arg) {
       //vE LISTAS 
     } 
 } 
-
+/*
 int main() {
     // Crear la memoria compartida
     crearMemoriaCompartida();
@@ -75,4 +75,4 @@ int main() {
     borrarMemoriaCompartida();
 
     return 0;
-}   
+}   */

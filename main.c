@@ -5,7 +5,7 @@
 #include <sys/shm.h>
 #include "encargado.c"
 
-
+/*
 //Funcion para liberar la memoria compartida y sus datos 
 void desvincularAlmacen(Almacen* almacen, int shmId) {
     // Desadjunta el área de memoria compartida
@@ -21,7 +21,7 @@ void desvincularAlmacen(Almacen* almacen, int shmId) {
     else{
         printf("\nSe ha desvinculado el área de memoria compartida del Almacén\n");
     }
-}
+}*/
 
 
 
@@ -85,10 +85,12 @@ int main() {
     sem_init(&mutex_anaqueles, 0, 1); 
     sem_init(&mutex_almacen, 0, 1); 
  
-    //Genera las comunas y personas de cada comuna  
-    for (int i = 0; i < Numero_comunas; i++) { 
+    //Genera las comunas y personas de cada comuna
+    int i = 0;
+    int j = 0;
+    for (i; i < Numero_comunas; i++) { 
         generar_productos(&comunas[i],nombre_comida); 
-        for (int j = 0; j < Max_numero_personas; j++) { 
+        for (j; j < Max_numero_personas; j++) { 
             int* persona_id = malloc(2 * sizeof(int)); 
             persona_id[0] = i; // Comuna ID 
             persona_id[1] = j; // Persona ID 
