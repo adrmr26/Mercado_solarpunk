@@ -19,7 +19,7 @@
 /* Wait de los procesos */
 #include <sys/wait.h>
 
-#include "structs.h"
+#include "almacen_memoriaCompartida.c"
 /* srand */
 #include <time.h>
 
@@ -54,12 +54,11 @@ void borrarMemoriaCompartida() {
     }
 }
 */
-void* inicializar_encargado(void* arg) { 
-    int* id_persona = (int*)arg; 
-    int comuna_id = id_persona[0]; 
-    int persona_id = id_persona[1]; 
-    Comuna* comuna = &comunas[comuna_id]; 
+
+void* inicializar_encargado_principal(Lista *lista_principal) { 
+    inicializar_almacen(lista_principal);
     
+
     while (1) { //De esta forma el loop es infinito hasta que se encuentre un break  
       //vE LISTAS 
     } 

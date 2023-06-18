@@ -105,4 +105,5 @@ void main() {
 
     munmap(mercado, sizeof(Mercado));
     shm_unlink(MC);//se borra la memoria 
+    
 }

@@ -4,6 +4,9 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include "encargado.c"
+#include "lista.c"
+
+Lista productos_general;
 
 /*
 //Funcion para liberar la memoria compartida y sus datos 
@@ -73,6 +76,29 @@ void* inicializar_persona(void* arg) {
         sleep(1); //De tiempo toma el que dura  
     } 
 } 
+
+//Inicializa el encargado de cada comuna 
+void* inicializar_encargado(void* arg) { 
+    int* id_persona = (int*)arg; 
+    int comuna_id = id_persona[0]; 
+    int persona_id = id_persona[1]; 
+    Comuna* comuna = &comunas[comuna_id]; 
+ 
+    while (1) { //mando la lista 
+    } 
+}
+
+//Crea la lista general de productos para ser utilizada por almacen y mercado
+void crear_lista_general(char comidas){
+    for(int i = 0 ; i < 11;i++){
+        Producto* producto = (Producto*)malloc(sizeof(Producto));
+        producto->codigo = i+1;
+        producto->nombre = comidas[i];
+        producto->disponibilidad = rand() % 10 + 1; ;
+        producto->necesidad = 0 ; //La necesidad se muestra en 0 , ya que se esta inicializando
+        insertar_lista(productos_general,producto);
+    }
+}
  
 // Ejemplo de uso 
 int main() { 
@@ -84,7 +110,15 @@ int main() {
      // Inicializa un semaforo  
     sem_init(&mutex_anaqueles, 0, 1); 
     sem_init(&mutex_almacen, 0, 1); 
- 
+
+    //Crea la lista general que utiliza mercado y almacen
+   
+    inicializar_lista(productos_general);
+    crear_lista_general(nombre_comida);
+
+    //Inicializa el ecnargado general de almacen y mercado
+    inicializar_encargado_principal(productos_general);
+
     //Genera las comunas y personas de cada comuna
     int i = 0;
     int j = 0;

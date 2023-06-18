@@ -13,10 +13,16 @@ typedef struct Producto {
 }Producto; 
  
 typedef struct Nodo { 
- Producto *producto; 
+    Producto *producto; 
     struct Nodo *siguiente; 
 }Nodo; 
- 
+
+typedef struct Lista {
+     Nodo *inicio;
+     Nodo *fin;
+     int tamano;
+}Lista;
+
 typedef struct Comuna { 
     Producto productos[Max_numero_producto]; 
     int numero_productos; 
