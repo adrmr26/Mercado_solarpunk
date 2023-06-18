@@ -25,7 +25,7 @@
 #include <time.h>
 
 /* DEFINES */
-#define MC "/memoria_compartida_almacen"
+//#define MC "/memoria_compartida_almacen"
 #define MAX_PRODUCTOS 3
 
 int fd_shm = -1;

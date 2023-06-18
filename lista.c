@@ -13,20 +13,20 @@ void inicializar_lista (Lista *lista){
 }
 
 //Insertar al inicio de la lista 
-int insertar_lista (Lista * lista, Producto *producto){
+int insertar_lista (Lista *lista, Producto *producto){
     Nodo *nuevo_nodo;
     if ((nuevo_nodo = (Nodo *) malloc (sizeof (Nodo))) == NULL) {
         return -1;
     }
     strcpy (nuevo_nodo->producto, producto);
-    nuevo_nodo->siguiente = lista->inicio
+    nuevo_nodo->siguiente = lista->inicio;
     lista->inicio = nuevo_nodo;
     lista->tamano++;
     return 0;
 }
 
 //Elimina el primer elemento de la lista 
-int eliminar_nodo (Lista * lista){
+int eliminar_nodo (Lista *lista){
   if (lista->tamano == 0)
     return -1;
   Producto *producto_eliminado;
@@ -34,14 +34,14 @@ int eliminar_nodo (Lista * lista){
   lista->inicio = lista->inicio->siguiente;
   if (lista->tamano == 1)
     lista->fin = NULL;
-  free (producto_eliminado->producto);
+  //free (producto_eliminado->producto);
   free (producto_eliminado);
   lista->tamano--;
   return 0;
 }
 
 //Imprime la lista completa 
-void imprimir_lista (Lista * lista){
+void imprimir_lista (Lista *lista){
   Nodo *nodo_actual;
   nodo_actual = lista->inicio;
   while (nodo_actual != NULL){

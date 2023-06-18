@@ -89,14 +89,14 @@ void* inicializar_encargado(void* arg) {
 }
 
 //Crea la lista general de productos para ser utilizada por almacen y mercado
-void crear_lista_general(char comidas){
+void crear_lista_general(char *comidas){
     for(int i = 0 ; i < 11;i++){
         Producto* producto = (Producto*)malloc(sizeof(Producto));
         producto->codigo = i+1;
         producto->nombre = comidas[i];
         producto->disponibilidad = rand() % 10 + 1; ;
         producto->necesidad = 0 ; //La necesidad se muestra en 0 , ya que se esta inicializando
-        insertar_lista(productos_general,producto);
+        insertar_lista(&productos_general,producto);
     }
 }
  
@@ -113,11 +113,15 @@ int main() {
 
     //Crea la lista general que utiliza mercado y almacen
    
-    inicializar_lista(productos_general);
-    crear_lista_general(nombre_comida);
+    inicializar_lista(&productos_general);
+    crear_lista_general(&nombre_comida);
+    inicializar_almacen(&productos_general);
+
+
+    /*
 
     //Inicializa el ecnargado general de almacen y mercado
-    inicializar_encargado_principal(productos_general);
+    inicializar_encargado_principal(&productos_general);
 
     //Genera las comunas y personas de cada comuna
     int i = 0;
