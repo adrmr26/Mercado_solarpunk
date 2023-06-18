@@ -130,8 +130,8 @@ int main() {
             persona_id[1] = j; // Persona ID 
             pthread_create(&personas_hilos[i][j], NULL, inicializar_persona, persona_id); 
         } 
-        int* persona_id = malloc(2 * sizeof(int)); 
-        pthread_create(&personas_hilos[i][j], NULL, inicializar_encargado, persona_id); //crear el encargado
+       // int* persona_id = malloc(2 * sizeof(int)); 
+        //pthread_create(&personas_hilos[i][j], NULL, inicializar_encargado, persona_id); //crear el encargado
     }
   
     

@@ -20,6 +20,7 @@
 #include <sys/wait.h>
 
 #include "almacen_memoriaCompartida.c"
+#include "mercado_memoriaCompartida.c"
 /* srand */
 #include <time.h>
 
@@ -57,12 +58,15 @@ void borrarMemoriaCompartida() {
 
 void* inicializar_encargado_principal(Lista *lista_principal) { 
     inicializar_almacen(lista_principal);
+    Mercado* anaqueles = inicializar_mercado(lista_principal);
     
 
     while (1) { //De esta forma el loop es infinito hasta que se encuentre un break  
       //vE LISTAS 
+
     } 
 } 
+
 /*
 int main() {
     // Crear la memoria compartida

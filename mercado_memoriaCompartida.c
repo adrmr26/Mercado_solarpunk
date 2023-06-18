@@ -37,8 +37,8 @@ void cambio_producto(Mercado *mercado) {
 
 //Genera los productos de los anaqueles de forma aleatoria 
 void generar_productos_anaqueles(Mercado* mercado, char nombre_productos[11][10]) { 
+   
     int i; 
-    
     for (i = 0; i < Numero_anaqueles; i++) { 
         int index_producto = rand() % 11; 
         mercado->lista_productos_anaqueles[i].codigo = i + 1; 
@@ -49,7 +49,9 @@ void generar_productos_anaqueles(Mercado* mercado, char nombre_productos[11][10]
     mercado->cantidad_anaqueles = Numero_anaqueles; 
 } 
 
-void main() {
+
+//Inicializa la memoria y devuelve la lista de anaqueles , el mercado
+Mercado*  inicializar_mercado(Lista *lista_general){
 
     srand(time(NULL));
     
@@ -67,8 +69,8 @@ void main() {
 
     //Inicializar los productos 
     generar_productos_anaqueles(mercado,nombre_comida);
-
-
+    return mercado;
+/*
     for(int i = 0; i < Numero_comunas; i++) {
         if (fork() == 0) { // Es un proceso que crea una copia /hijo
             sleep((rand() % 9) + 1);
@@ -99,11 +101,12 @@ void main() {
         }
     }
 
-    /* Waiting for the children */
+   
     for (int i = 0; i < Numero_comunas; i++) 
         while (wait(NULL) == -1);
 
     munmap(mercado, sizeof(Mercado));
     shm_unlink(MC);//se borra la memoria 
+    */
     
 }

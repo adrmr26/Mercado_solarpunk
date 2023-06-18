@@ -74,7 +74,7 @@ void inicializar_almacen(Lista *lista_general) {
     }
 
     munmap(lista_general, sizeof(Lista));
-    close(fd_shm);
-    shm_unlink(MC);
+    //close(fd_shm);
+   // shm_unlink(MC);
 
 }
