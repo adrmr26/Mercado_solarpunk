@@ -22,10 +22,11 @@
 #include <time.h>
 
 /* structs.h*/
-#include "structs.h"
+#include "lista.c"
 
 /* DEFINES */
-#define MC "/memoria_compartida_mercado"
+#define MCM "/memoria_compartida_mercado"
+
 /*
 //Aqui viene la función del encargado cuando cambia un anaquel
 void cambio_producto(Mercado *mercado) {
@@ -58,27 +59,21 @@ void inicializar_mercado(Nodo *lista_general){
     srand(time(NULL));
     
     //Abre la memoria compartida
-    int fd_shm = shm_open(MC, O_RDWR | O_CREAT | O_EXCL,  S_IRUSR | S_IWUSR);
+    int fd_shm = shm_open(MCM, O_RDWR | O_CREAT | O_EXCL,  S_IRUSR | S_IWUSR);
 
-    ftruncate(fd_shm, sizeof(Mercado)); //Tamaño de la memoria compartida
+    ftruncate(fd_shm, sizeof(Producto)); //Tamaño de la memoria compartida
 
-    Mercado *mercado = mmap(NULL, sizeof(Mercado), PROT_READ | PROT_WRITE, MAP_SHARED, fd_shm, 0);
-
-    // Se inicializan los valores
-    sem_init(&mercado->mutex,1,1);
-    mercado->cantidad_anaqueles = 3;
-  
-    //Inicializar los productos 
+    Producto *mercado = mmap(NULL, sizeof(Producto), PROT_READ | PROT_WRITE, MAP_SHARED, fd_shm, 0);
   
     if (mercado == MAP_FAILED) {
-        perror("\nError al mapear la memoria compartida del almacén");
+        perror("\nError al mapear la memoria compartida del mercado");
         exit(1);
     }
     
     Nodo* actual = lista_general;
 
-    // Se agrega la lista de productos en la memoria compartida siendo los anaqueles
-    for(int i = 0; i < mercado->cantidad_anaqueles; i++){
+    // Se agrega la lista de productos en la memoria compartida del almacen
+    for(int i = 0; i < 3; i++){
         Producto* producto = &mercado[i];
         producto->codigo = actual->producto.codigo;
         strcpy(producto->nombre, actual->producto.nombre);
@@ -86,9 +81,11 @@ void inicializar_mercado(Nodo *lista_general){
         producto->disponibilidad = actual->producto.disponibilidad;
         actual = actual->siguiente;
     }
+
+    // PONER el número de anaqueles como define
     // Imprimir los productos en la memoria compartida
-    printf("Productos en la memoria compartida:\n");
-    for (int i = 0; i < MAX_PRODUCTOS; i++) {
+    printf("Productos en la memoria compartida de mercado:\n");
+    for (int i = 0; i < 3; i++) {
         printf("Nombre: %s\n", mercado[i].nombre);
         printf("Código: %d\n", mercado[i].codigo);
         printf("Disponibilidad: %d\n", mercado[i].disponibilidad);
@@ -98,7 +95,9 @@ void inicializar_mercado(Nodo *lista_general){
 
     munmap(mercado, sizeof(Producto));
     close(fd_shm);
-    shm_unlink(MC);
+    shm_unlink(MCM);
+
+}
 /*
     for(int i = 0; i < Numero_comunas; i++) {
         if (fork() == 0) { // Es un proceso que crea una copia /hijo

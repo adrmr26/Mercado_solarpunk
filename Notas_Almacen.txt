@@ -1,3 +1,0 @@
-****FALTA******
-- Semáforos para el acceso a la memoria compartida
-- Algoritmos de intercambio o swap (paginación) 
