@@ -102,8 +102,84 @@ int main() {
     productos_general = NULL;  // Inicialmente, la lista está vacía
     
     //Crea la lista general que utiliza mercado y almacen
-    crear_lista_general(&productos_general, nombre_comida);
+    Producto producto1;
+    strcpy(producto1.nombre, nombre_comida[0]);
+    producto1.codigo = 1001;
+    producto1.disponibilidad = rand() % 10 + 1;
+    producto1.necesidad = rand() % 10 + 1;
     
+    Producto producto2;
+    strcpy(producto2.nombre, nombre_comida[1]);
+    producto2.codigo = 1002;
+    producto2.disponibilidad = rand() % 10 + 1;
+    producto2.necesidad = rand() % 10 + 1;
+    
+    Producto producto3;
+    strcpy(producto3.nombre, nombre_comida[2]);
+    producto3.codigo = 1003;
+    producto3.disponibilidad = rand() % 10 + 1;
+    producto3.necesidad = rand() % 10 + 1;
+    
+    Producto producto4;
+    strcpy(producto4.nombre, nombre_comida[3]);
+    producto4.codigo = 1004;
+    producto4.disponibilidad = rand() % 10 + 1;
+    producto4.necesidad = rand() % 10 + 1;
+     
+    Producto producto5;
+    strcpy(producto5.nombre, nombre_comida[4]);
+    producto5.codigo = 1005;
+    producto5.disponibilidad = rand() % 10 + 1;
+    producto5.necesidad = rand() % 10 + 1;
+    
+    Producto producto6;
+    strcpy(producto6.nombre, nombre_comida[5]);
+    producto6.codigo = 1006;
+    producto6.disponibilidad = rand() % 10 + 1;
+    producto6.necesidad = rand() % 10 + 1;
+
+    Producto producto7;
+    strcpy(producto7.nombre, nombre_comida[6]);
+    producto7.codigo = 1007;
+    producto7.disponibilidad = rand() % 10 + 1;
+    producto7.necesidad = rand() % 10 + 1;
+    
+    Producto producto8;
+    strcpy(producto8.nombre, nombre_comida[7]);
+    producto8.codigo = 1008;
+    producto8.disponibilidad = rand() % 10 + 1;
+    producto8.necesidad = rand() % 10 + 1;
+    
+    Producto producto9;
+    strcpy(producto9.nombre, nombre_comida[8]);
+    producto9.codigo = 1009;
+    producto9.disponibilidad = rand() % 10 + 1;
+    producto9.necesidad = rand() % 10 + 1;
+    
+    Producto producto10;
+    strcpy(producto10.nombre, nombre_comida[9]);
+    producto10.codigo = 1010;
+    producto10.disponibilidad = rand() % 10 + 1;
+    producto10.necesidad = rand() % 10 + 1;
+    
+    Producto producto11;
+    strcpy(producto11.nombre, nombre_comida[10]);
+    producto11.codigo = 1011;
+    producto11.disponibilidad = rand() % 10 + 1;
+    producto11.necesidad = rand() % 10 + 1;
+    
+    // Insertar los productos en la lista
+    insertarProducto(&productos_general, producto1);
+    insertarProducto(&productos_general, producto2);
+    insertarProducto(&productos_general, producto3);
+    insertarProducto(&productos_general, producto4);
+    insertarProducto(&productos_general, producto5);
+    insertarProducto(&productos_general, producto6);
+    insertarProducto(&productos_general, producto7);
+    insertarProducto(&productos_general, producto8);
+    insertarProducto(&productos_general, producto9);
+    insertarProducto(&productos_general, producto10);
+    insertarProducto(&productos_general, producto11);
     // Crea los productos generales 
     
    
