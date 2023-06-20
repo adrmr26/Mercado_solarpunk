@@ -6,7 +6,7 @@
 #include "encargado.c"
 #include "lista.c"
 
-Lista productos_general;
+ Nodo* productos_general;
 
 /*
 //Funcion para liberar la memoria compartida y sus datos 
@@ -87,18 +87,6 @@ void* inicializar_encargado(void* arg) {
     while (1) { //mando la lista 
     } 
 }
-
-//Crea la lista general de productos para ser utilizada por almacen y mercado
-void crear_lista_general(char *comidas){
-    for(int i = 0 ; i < 11;i++){
-        Producto* producto = (Producto*)malloc(sizeof(Producto));
-        producto->codigo = i+1;
-        producto->nombre = comidas[i];
-        producto->disponibilidad = rand() % 10 + 1; ;
-        producto->necesidad = 0 ; //La necesidad se muestra en 0 , ya que se esta inicializando
-        insertar_lista(&productos_general,producto);
-    }
-}
  
 // Ejemplo de uso 
 int main() { 
@@ -112,9 +100,12 @@ int main() {
     sem_init(&mutex_almacen, 0, 1); 
 
     //Crea la lista general que utiliza mercado y almacen
+    crear_lista_general(nombre_comida);
+    productos_general = NULL;  // Inicialmente, la lista está vacía
+    
+    // Crea los productos generales 
+    
    
-    inicializar_lista(&productos_general);
-    crear_lista_general(&nombre_comida);
     inicializar_almacen(&productos_general);
 
 
