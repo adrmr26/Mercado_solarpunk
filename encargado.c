@@ -19,8 +19,8 @@
 /* Wait de los procesos */
 #include <sys/wait.h>
 
-#include "almacen_memoriaCompartida.c"
-#include "mercado_memoriaCompartida.c"
+//#include "almacen_memoriaCompartida.c"
+//#include "mercado_memoriaCompartida.c"
 /* srand */
 #include <time.h>
 

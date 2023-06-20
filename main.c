@@ -3,8 +3,9 @@
 #include <string.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#include "encargado.c"
-#include "lista.c"
+//#include "encargado.c"
+//#include "lista.c"
+#include "almacen_memoriaCompartida.c"
 
  Nodo* productos_general;
 
@@ -183,7 +184,7 @@ int main() {
     // Crea los productos generales 
     
     imprimir_lista(productos_general);
-    inicializar_almacen(&productos_general);
+    inicializar_almacen(productos_general);
     
 
 
