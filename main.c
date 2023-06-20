@@ -6,6 +6,7 @@
 //#include "encargado.c"
 //#include "lista.c"
 #include "almacen_memoriaCompartida.c"
+#include "mercado_memoriaCompartida.c"
 
  Nodo* productos_general;
 
@@ -185,6 +186,7 @@ int main() {
     
     imprimir_lista(productos_general);
     inicializar_almacen(productos_general);
+    inicializar_mercado(productos_general);
     
 
 

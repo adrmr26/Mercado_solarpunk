@@ -22,7 +22,7 @@
 #include <time.h>
 
 /* structs.h*/
-//#include "structs.h"
+#include "structs.h"
 
 /* DEFINES */
 #define MC "/memoria_compartida_mercado"
@@ -51,9 +51,9 @@ void generar_productos_anaqueles(Mercado* mercado, char nombre_productos[11][10]
 } 
 */
 
-/*
+
 //Inicializa la memoria y devuelve la lista de anaqueles , el mercado
-Mercado*  inicializar_mercado(Lista *lista_general){
+void inicializar_mercado(Nodo *lista_general){
 
     srand(time(NULL));
     
@@ -67,12 +67,38 @@ Mercado*  inicializar_mercado(Lista *lista_general){
     // Se inicializan los valores
     sem_init(&mercado->mutex,1,1);
     mercado->cantidad_anaqueles = 3;
-    char nombre_comida[11][10] = {"Arroz","Frijoles","Maiz","Papa","Zanahoria","Yuca","Lentejas","Tomate","Brocoli","Coliflor","Aguacate"} ; 
-
+  
     //Inicializar los productos 
-    generar_productos_anaqueles(mercado,nombre_comida);
-    return mercado;
-    */
+  
+    if (mercado == MAP_FAILED) {
+        perror("\nError al mapear la memoria compartida del almacén");
+        exit(1);
+    }
+    
+    Nodo* actual = lista_general;
+
+    // Se agrega la lista de productos en la memoria compartida siendo los anaqueles
+    for(int i = 0; i < mercado->cantidad_anaqueles; i++){
+        Producto* producto = &mercado[i];
+        producto->codigo = actual->producto.codigo;
+        strcpy(producto->nombre, actual->producto.nombre);
+        producto->necesidad = actual->producto.necesidad;
+        producto->disponibilidad = actual->producto.disponibilidad;
+        actual = actual->siguiente;
+    }
+    // Imprimir los productos en la memoria compartida
+    printf("Productos en la memoria compartida:\n");
+    for (int i = 0; i < MAX_PRODUCTOS; i++) {
+        printf("Nombre: %s\n", mercado[i].nombre);
+        printf("Código: %d\n", mercado[i].codigo);
+        printf("Disponibilidad: %d\n", mercado[i].disponibilidad);
+        printf("Necesidad: %d\n", mercado[i].necesidad);
+        printf("------------------\n");
+    }
+
+    munmap(mercado, sizeof(Producto));
+    close(fd_shm);
+    shm_unlink(MC);
 /*
     for(int i = 0; i < Numero_comunas; i++) {
         if (fork() == 0) { // Es un proceso que crea una copia /hijo
