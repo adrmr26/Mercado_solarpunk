@@ -22,7 +22,7 @@
 #include <time.h>
 
 /* structs.h*/
-#include "lista.c"
+//#include "lista.c"
 
 /* DEFINES */
 #define MC "/memoria_compartida_almacen"

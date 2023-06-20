@@ -7,10 +7,10 @@
  
 typedef struct Producto { 
     int codigo; 
-    char nombre[20]; 
+    char nombre[25]; 
     int necesidad;  
     int disponibilidad;  
-}Producto; 
+} Producto; 
  
 typedef struct Nodo { 
     Producto producto; 

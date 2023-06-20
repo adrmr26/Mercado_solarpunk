@@ -22,7 +22,7 @@
 #include <time.h>
 
 /* structs.h*/
-#include "structs.h"
+//#include "structs.h"
 
 /* DEFINES */
 #define MC "/memoria_compartida_mercado"
