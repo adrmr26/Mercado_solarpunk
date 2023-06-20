@@ -182,9 +182,11 @@ int main() {
     insertarProducto(&productos_general, producto11);
     // Crea los productos generales 
     
-   
+    imprimir_lista(productos_general);
     inicializar_almacen(&productos_general);
 
+
+    destruir_lista(&productos_general)
 
     /*
 
