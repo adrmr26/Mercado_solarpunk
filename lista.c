@@ -5,7 +5,7 @@
 #include <sys/shm.h>
 #include "structs.h"
 
-void insertar_lista (Nodo** lista,Producto *producto){
+void insertar_lista (Nodo** lista,Producto producto){
     Nodo* nuevo_producto = (Nodo*)malloc(sizeof(Nodo));
     nuevo_producto->producto = producto;
     nuevo_producto->siguiente = NULL;

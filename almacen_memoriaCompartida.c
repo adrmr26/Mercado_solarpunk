@@ -22,20 +22,19 @@
 #include <time.h>
 
 /* structs.h*/
-#include "structs.h"
 #include "lista.c"
 
 /* DEFINES */
 #define MC "/memoria_compartida_almacen"
 #define MAX_PRODUCTOS 3
 
- Lista productos_general;
-
+ //Lista productos_general;
+/*
 void inicializar_almacen(Lista *lista_general) {
 
     srand(time(NULL));
 
-    /* Abre el espacio de la memoria compartida */
+    //Abre el espacio de la memoria compartida 
     int fd_shm = shm_open(MC, O_RDWR | O_CREAT | O_EXCL,  S_IRUSR | S_IWUSR);
 
     ftruncate(fd_shm, sizeof(Producto)); //NOSE SI ESTA BIEN
@@ -52,7 +51,7 @@ void inicializar_almacen(Lista *lista_general) {
         lista_general->inicio = lista_general->inicio->siguiente;
     }
     
-/*
+
     Producto* producto1 = &almacen[0]; 
     producto1->codigo = 1;
     sprintf(producto1->nombre, "Arroz");
@@ -70,7 +69,7 @@ void inicializar_almacen(Lista *lista_general) {
     sprintf(producto3->nombre, "Maiz");
     producto3->necesidad = 0;
     producto3->disponibilidad = 0;
-*/
+
 
     // Imprimir los productos en la memoria compartida
     printf("Productos en la memoria compartida:\n");
@@ -105,4 +104,6 @@ int main(){
     crear_lista_general(&nombre_comida);
     //inicializar_almacen(&productos_general);
 
+
 }
+*/

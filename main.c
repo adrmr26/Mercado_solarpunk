@@ -183,10 +183,10 @@ int main() {
     // Crea los productos generales 
     
     imprimir_lista(productos_general);
-    inicializar_almacen(&productos_general);
+    // inicializar_almacen(&productos_general);
 
 
-    destruir_lista(&productos_general)
+    //destruir_lista(&productos_general)
 
     /*
 

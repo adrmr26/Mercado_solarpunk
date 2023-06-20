@@ -55,7 +55,7 @@ void borrarMemoriaCompartida() {
     }
 }
 */
-
+/*
 void* inicializar_encargado_principal(Lista *lista_principal) { 
     inicializar_almacen(lista_principal);
     Mercado* anaqueles = inicializar_mercado(lista_principal);
@@ -66,7 +66,7 @@ void* inicializar_encargado_principal(Lista *lista_principal) {
 
     } 
 } 
-
+*/
 /*
 int main() {
     // Crear la memoria compartida

@@ -26,7 +26,7 @@
 
 /* DEFINES */
 #define MC "/memoria_compartida_mercado"
-
+/*
 //Aqui viene la función del encargado cuando cambia un anaquel
 void cambio_producto(Mercado *mercado) {
     sleep((rand() % 5) + 2);
@@ -34,7 +34,8 @@ void cambio_producto(Mercado *mercado) {
     mercado->available_pieces = 3;
     printf("I'm mum, and I have brought a new cake\n");
 }
-
+*/
+/*
 //Genera los productos de los anaqueles de forma aleatoria 
 void generar_productos_anaqueles(Mercado* mercado, char nombre_productos[11][10]) { 
    
@@ -48,8 +49,9 @@ void generar_productos_anaqueles(Mercado* mercado, char nombre_productos[11][10]
     } 
     mercado->cantidad_anaqueles = Numero_anaqueles; 
 } 
+*/
 
-
+/*
 //Inicializa la memoria y devuelve la lista de anaqueles , el mercado
 Mercado*  inicializar_mercado(Lista *lista_general){
 
@@ -70,6 +72,7 @@ Mercado*  inicializar_mercado(Lista *lista_general){
     //Inicializar los productos 
     generar_productos_anaqueles(mercado,nombre_comida);
     return mercado;
+    */
 /*
     for(int i = 0; i < Numero_comunas; i++) {
         if (fork() == 0) { // Es un proceso que crea una copia /hijo
@@ -109,4 +112,4 @@ Mercado*  inicializar_mercado(Lista *lista_general){
     shm_unlink(MC);//se borra la memoria 
     */
     
-}
+//}
