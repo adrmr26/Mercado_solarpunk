@@ -82,7 +82,7 @@ void destruir_lista(Nodo** lista) {
     printf("Lista de productos destruida.\n");
 }
 
-void crear_lista_general(char nombre_comida){
+void crear_lista_general(Nodo** productos_general,char nombre_comida){
  // Crea los productos generales 
     Producto producto1;
     strcpy(producto1.nombre, nombre_comida[0]);
@@ -136,27 +136,30 @@ void crear_lista_general(char nombre_comida){
     strcpy(producto9.nombre, nombre_comida[8]);
     producto9.codigo = 1001;
     producto9.disponibilidad = rand() % 10 + 1;
+    producto9.necesidad = rand() % 10 + 1;
     
     Producto producto10;
     strcpy(producto10.nombre, nombre_comida[9]);
     producto10.codigo = 1002;
     producto10.disponibilidad = rand() % 10 + 1;
+    producto10.necesidad = rand() % 10 + 1;
     
     Producto producto11;
     strcpy(producto11.nombre, nombre_comida[10]);
     producto11.codigo = 1003;
     producto11.disponibilidad = rand() % 10 + 1;
+    producto11.necesidad = rand() % 10 + 1;
     
     // Insertar los productos en la lista
-    insertarProducto(&cabeza, producto1);
-    insertarProducto(&cabeza, producto2);
-    insertarProducto(&cabeza, producto3);
-    insertarProducto(&cabeza, producto4);
-    insertarProducto(&cabeza, producto5);
-    insertarProducto(&cabeza, producto6);
-    insertarProducto(&cabeza, producto7);
-    insertarProducto(&cabeza, producto8);
-    insertarProducto(&cabeza, producto9);
-    insertarProducto(&cabeza, producto10);
-    insertarProducto(&cabeza, producto11);
+    insertarProducto(&productos_general, producto1);
+    insertarProducto(&productos_general, producto2);
+    insertarProducto(&productos_general, producto3);
+    insertarProducto(&productos_general, producto4);
+    insertarProducto(&productos_general, producto5);
+    insertarProducto(&productos_general, producto6);
+    insertarProducto(&productos_general, producto7);
+    insertarProducto(&productos_general, producto8);
+    insertarProducto(&productos_general, producto9);
+    insertarProducto(&productos_general, producto10);
+    insertarProducto(&productos_general, producto11);
 }

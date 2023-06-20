@@ -99,9 +99,10 @@ int main() {
     sem_init(&mutex_anaqueles, 0, 1); 
     sem_init(&mutex_almacen, 0, 1); 
 
-    //Crea la lista general que utiliza mercado y almacen
-    crear_lista_general(nombre_comida);
     productos_general = NULL;  // Inicialmente, la lista está vacía
+    
+    //Crea la lista general que utiliza mercado y almacen
+    crear_lista_general(&productos_general, nombre_comida);
     
     // Crea los productos generales 
     
