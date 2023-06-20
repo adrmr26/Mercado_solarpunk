@@ -169,21 +169,22 @@ int main() {
     producto11.necesidad = rand() % 10 + 1;
     
     // Insertar los productos en la lista
-    insertarProducto(&productos_general, producto1);
-    insertarProducto(&productos_general, producto2);
-    insertarProducto(&productos_general, producto3);
-    insertarProducto(&productos_general, producto4);
-    insertarProducto(&productos_general, producto5);
-    insertarProducto(&productos_general, producto6);
-    insertarProducto(&productos_general, producto7);
-    insertarProducto(&productos_general, producto8);
-    insertarProducto(&productos_general, producto9);
-    insertarProducto(&productos_general, producto10);
-    insertarProducto(&productos_general, producto11);
+    insertar_lista(&productos_general, producto1);
+    insertar_lista(&productos_general, producto2);
+    insertar_lista(&productos_general, producto3);
+    insertar_lista(&productos_general, producto4);
+    insertar_lista(&productos_general, producto5);
+    insertar_lista(&productos_general, producto6);
+    insertar_lista(&productos_general, producto7);
+    insertar_lista(&productos_general, producto8);
+    insertar_lista(&productos_general, producto9);
+    insertar_lista(&productos_general, producto10);
+    insertar_lista(&productos_general, producto11);
     // Crea los productos generales 
     
     imprimir_lista(productos_general);
-    // inicializar_almacen(&productos_general);
+    inicializar_almacen(&productos_general);
+    
 
 
     //destruir_lista(&productos_general)
@@ -247,9 +248,9 @@ int main() {
     producto3->necesidad= 0;
     
 
-    insertarProducto(&almacen->lista_productos, producto1);
-    insertarProducto(&almacen->lista_productos, producto2);
-    insertarProducto(&almacen->lista_productos, producto3);
+    insertar_lista(&almacen->lista_productos, producto1);
+    insertar_lista(&almacen->lista_productos, producto2);
+    insertar_lista(&almacen->lista_productos, producto3);
 
 
     //Inicializa las comunas 

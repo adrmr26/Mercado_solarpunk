@@ -21,7 +21,7 @@
 /* srand */
 #include <time.h>
 
-/* structs.h*/
+#include "structs.h"
 //#include "lista.c"
 
 /* DEFINES */
@@ -29,8 +29,7 @@
 #define MAX_PRODUCTOS 3
 
  //Lista productos_general;
-/*
-void inicializar_almacen(Lista *lista_general) {
+void inicializar_almacen(Nodo *lista_general) {
 
     srand(time(NULL));
 
@@ -45,13 +44,15 @@ void inicializar_almacen(Lista *lista_general) {
         perror("Error al mapear la memoria compartida");
         exit(1);
     }
+    Nodo* actual = lista_general;
 
-    for(int i = 0; lista_general->inicio != NULL; i++){
-        lista_general->inicio->producto = &almacen[i];
-        lista_general->inicio = lista_general->inicio->siguiente;
+    for(int i = 0; actual != NULL; i++){
+        Producto* producto = actual->producto;
+        producto = &almacen[i];
+        actual = actual->siguiente;
     }
     
-
+/*
     Producto* producto1 = &almacen[0]; 
     producto1->codigo = 1;
     sprintf(producto1->nombre, "Arroz");
@@ -70,6 +71,7 @@ void inicializar_almacen(Lista *lista_general) {
     producto3->necesidad = 0;
     producto3->disponibilidad = 0;
 
+*/
 
     // Imprimir los productos en la memoria compartida
     printf("Productos en la memoria compartida:\n");
@@ -86,24 +88,3 @@ void inicializar_almacen(Lista *lista_general) {
    // shm_unlink(MC);
 
 }
-
-//Crea la lista general de productos para ser utilizada por almacen y mercado
-void crear_lista_general(char *comidas){
-    for(int i = 0 ; i < 11;i++){
-        Producto* producto = (Producto*)malloc(sizeof(Producto));
-        producto->codigo = i+1;
-        strcpy(producto->nombre, comidas[i]);
-        producto->disponibilidad = rand() % 10 + 1; 
-        producto->necesidad = 0 ; //La necesidad se muestra en 0 , ya que se esta inicializando
-        insertar_lista(&productos_general,producto);
-    }
-}
-
-int main(){
-    char nombre_comida[11][10] = {"Arroz","Frijoles","Maiz","Papa","Zanahoria","Yuca","Lentejas","Tomate","Brocoli","Coliflor","Aguacate"} ; 
-    crear_lista_general(&nombre_comida);
-    //inicializar_almacen(&productos_general);
-
-
-}
-*/
