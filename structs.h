@@ -19,8 +19,8 @@ typedef struct Nodo {
 
 
 typedef struct Comuna { 
-    Producto productos[Max_numero_producto]; 
-    int numero_productos; 
+    pthread_t hilos[Max_numero_personas];
+    Producto productos[Max_numero_producto];
 } Comuna; 
  
 typedef struct Mercado { 
@@ -28,7 +28,3 @@ typedef struct Mercado {
     sem_t mutex;
     int cantidad_anaqueles;
 }Mercado; 
- 
-Comuna comunas[Numero_comunas];
-sem_t mutex_anaqueles;
-sem_t mutex_almacen;

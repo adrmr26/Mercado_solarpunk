@@ -36,6 +36,112 @@ Producto *mercado;
 int fd_shm_almacen;
 int fd_shm_mercado;
 
+sem_t* sem_lectura;
+sem_t* sem_escritura;
+
+void encargado(Nodo *lista_general_productos, Comuna *lista_comunas){
+    // Se crea la memoria compartida de almacen
+    inicializar_almacen(lista_general_productos);
+    imprimir_productos_almacen();
+
+    // Se crea la memoria compartida de mercado
+    inicializar_mercado(lista_general_productos);
+    imprimir_anaqueles();
+
+    //Se crean los semáforos
+    crear_semaforos();
+
+    //Lee constantemente el mercado
+    int i = 0;
+    while (i < 3) {
+        int productos_encontrados = 0;
+        int productos_no_encontrados = 0;
+        printf("\nEncargado revisando\n");
+        for(int i = 0; i < Numero_comunas; i++){
+            for(int j = 0; j < Max_numero_producto; j++){
+                for(int k = 0; k < NUM_ANAQUELES; k++){
+                    //sem_wait(sem_lectura);  // Espera al semáforo de escritura
+                    if (strcmp(mercado[k].nombre , lista_comunas[i].productos[j].nombre) == 0){
+                        //sem_post(sem_escritura);  // Libera el semáforo de escritura
+                        productos_encontrados++;
+                        //sem_wait(sem_escritura);  // Espera al semáforo de escritura
+                        mercado[i].disponibilidad += lista_comunas[i].productos[j].disponibilidad;
+                        mercado[i].necesidad -= lista_comunas[i].productos[j].necesidad;
+                        mercado[i].codigo = lista_comunas[i].productos[j].codigo;
+                        strcpy(mercado[i].nombre, lista_comunas[i].productos[j].nombre);
+                    }
+                    else{
+                     productos_no_encontrados++;
+                    }
+                    //sem_post(sem_lectura);  // Libera el semáforo de lectura
+                }
+            }
+        }
+        i++;
+        printf("\nCantidad de productos encontrados: %d", productos_encontrados);
+        printf("\nCantidad de productos NO encontrados: %d\n", productos_no_encontrados);
+        intercambiar_productos_FIFO();
+        //intercambiar_productos_MFU();
+    }
+
+    desvincular_MC_mercado();
+    desvincular_MC_almacen();
+
+}
+
+void intercambiar_productos_FIFO() {
+
+    int rand_almacen = rand() % 11;
+    int rand_mercado = rand() % 3;
+
+    Producto producto1_almacen = almacen[rand_almacen];
+    Producto producto2_mercado = mercado[rand_mercado];
+
+    almacen[rand_almacen] = producto2_mercado;
+    mercado[rand_mercado] = producto1_almacen;
+
+}
+
+void intercambiar_productos_MFU(){
+
+    int pos_menor_disp = 0;
+    int pos_mayor_disp = 0;
+
+    for(int i = 0; i < MAX_PRODUCTOS; i++){
+        if(almacen[i].disponibilidad > almacen[pos_mayor_disp].disponibilidad){
+            pos_mayor_disp = i;
+        }
+    }
+
+    for(int j = 0; j < NUM_ANAQUELES; j++){
+        if(mercado[j].disponibilidad < mercado[pos_menor_disp].disponibilidad){
+            pos_menor_disp = j;
+        }
+    }
+
+    // Se hace el intercambio de productos 
+    Producto producto_almacen = almacen[pos_mayor_disp];
+    Producto producto_mercado = mercado[pos_menor_disp];
+
+    almacen[pos_mayor_disp] = producto_mercado;
+    mercado[pos_menor_disp] = producto_almacen;
+
+}
+
+// Se crean los semáforos de lectura y escritura 
+void crear_semaforos(){
+    sem_lectura = sem_open("/sem_lectura", O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 0);
+    sem_escritura = sem_open("/sem_escritura", O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, 1);
+}
+
+// Se eliminan los semáforos de lectura y escritura 
+void eliminar_semaforos(){
+    sem_close(sem_lectura);
+    sem_close(sem_escritura);
+    sem_unlink("/sem_lectura");
+    sem_unlink("/sem_escritura");
+}
+
 // Se crea la memoria compartida de almacen
 void inicializar_almacen(Nodo *lista_general) {
 
@@ -44,7 +150,7 @@ void inicializar_almacen(Nodo *lista_general) {
     //Abre el espacio de la memoria compartida 
     fd_shm_almacen = shm_open(MCA, O_RDWR | O_CREAT | O_EXCL,  S_IRUSR | S_IWUSR);
 
-    ftruncate(fd_shm_almacen, sizeof(Producto)); 
+    ftruncate(fd_shm_almacen, MAX_PRODUCTOS * sizeof(Producto)); 
 
     almacen = mmap(NULL, sizeof(Producto), PROT_READ | PROT_WRITE, MAP_SHARED, fd_shm_almacen, 0);
 
@@ -100,7 +206,7 @@ void inicializar_mercado(Nodo *lista_general){
     //Abre la memoria compartida
     fd_shm_mercado = shm_open(MCM, O_RDWR | O_CREAT | O_EXCL,  S_IRUSR | S_IWUSR);
 
-    ftruncate(fd_shm_mercado, sizeof(Producto)); //Tamaño de la memoria compartida
+    ftruncate(fd_shm_mercado, NUM_ANAQUELES * sizeof(Producto)); //Tamaño de la memoria compartida
 
     mercado = mmap(NULL, sizeof(Producto), PROT_READ | PROT_WRITE, MAP_SHARED, fd_shm_mercado, 0);
   
