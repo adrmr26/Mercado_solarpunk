@@ -6,17 +6,15 @@
 
 #include "encargado.c"
 
-#define NUM_HILOS 6
+#define NUM_HILOS 6 // Número de hilos
 
- Nodo* productos_general;
+ Nodo* productos_general; // lista de productos general
  Comuna lista_comunas[Numero_comunas]; //Lista de comunas
- int pos_comuna = 0;
+ int pos_comuna = 0; // Id de cada comuna
 
 //Genera los productos de cada comuna de forma aleatoria  
 void generar_productos(Comuna* comuna, char nombre_productos[11][10]) { 
     int i; 
-    //int numero_personas = rand() % Max_numero_personas + 1; //Se define la cantidad de personas de forma aleatorea 
-
     for (i = 0; i < Max_numero_producto; i++) { 
         int index_producto = rand() % 11;
         Producto producto;
@@ -30,13 +28,7 @@ void generar_productos(Comuna* comuna, char nombre_productos[11][10]) {
     for(i=0; i< Max_numero_producto; i++){
         printf("\nNombre producto: %s\n", comuna->productos[i].nombre);
     }
-    /*
-    comuna->numero_productos = Max_numero_producto; 
 
-   for (i = 0; i < numero_personas; i++) {  
-        int id_producto = rand() % Max_numero_producto; 
-        comuna->productos[id_producto].necesidad++; // Aumentar la necesidad de un producto aleatorio para iniciar 
-    } */
 } 
 
 //Gestiona los hilos y su funcionamiento como persona modificando disponibilidad y 
@@ -49,31 +41,7 @@ void* gestionar_Producto(void* arg) {
     pthread_exit(NULL);
 }
 
-/*
-//Inicializa las personas , en este caso los hilos con su acción , cantidad de producto y tiempo de duracion  
-void* inicializar_persona(int j, int i) { 
-    //int* id_persona = (int*)arg; 
-    int comuna_id = i;
-    int persona_id = j;
-    Comuna* comuna = &comunas[comuna_id]; 
- 
-    int producto_id = rand() % comuna->numero_productos; //Se le asigna un producto de la comuna de forma aleatorea 
-    int cantidad_producto = rand() % 10 + 1; //Cantidad que produce o necesita la persona  
-    int accion  = rand() % 2; //Selecciona de forma aleatorea que accion hace la persona  
-    int tiempo = rand() % 60 + 1; //Cantidad de tiempo que tarda en minutos   
- 
-    if (accion == 1) { 
-        comuna->productos[producto_id].disponibilidad += cantidad_producto; 
-        printf("La persona %d de la Comuna ID %d tiene lista %d unidades de %s, en %d minutos\n", persona_id, comuna_id, cantidad_producto, comuna->productos[producto_id].nombre, tiempo); 
-        
-    } else { 
-        comuna->productos[producto_id].necesidad += cantidad_producto;  //En esta misma lista debo revisar el hilo encargado comuna 
-        printf("La persona %d de la Comuna ID %d necesita %d unidades de %s, en %d minutos\n", persona_id, comuna_id, cantidad_producto, comuna->productos[producto_id].nombre, tiempo); 
-    } 
- 
-    //sleep(1); //De tiempo toma el que dura  
-} */
-
+// Función que crea un hilo y su funcionalidad 
 void* funcion_hilo(void* arg) {
     int id = *((int*)arg);
 
@@ -90,6 +58,7 @@ void* funcion_hilo(void* arg) {
     pthread_exit(NULL);
 }
 
+// Función que crea la lista de hilos de cada comuna
 void crear_lista_hilos(Comuna comuna) {
     int ids[NUM_HILOS];
 
@@ -109,7 +78,8 @@ void crear_lista_hilos(Comuna comuna) {
         }
     }
 }
- 
+
+// MAIN
 int main() { 
  
     char nombre_comida[11][10] = {"Arroz","Frijoles","Maiz","Papa","Zanahoria","Yuca","Lentejas","Tomate","Brocoli","Coliflor","Aguacate"} ; 
